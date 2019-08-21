@@ -1,0 +1,31 @@
+<web-app>
+    <servlet>
+        <servlet-name>myservlet</servlet-name>
+        <servlet-class>servletclass.WelcomeServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>myservlet</servlet-name>
+        <url-pattern>/mywelcomeservlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ajax</servlet-name>
+        <servlet-class>servletclass.DoAjaxServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ajax</servlet-name>
+        <url-pattern>/ajax.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>mysql</servlet-name>
+        <servlet-class>servletclass.member</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>mysql</servlet-name>
+        <url-pattern>/sql.do</url-pattern>
+    </servlet-mapping>
+</web-app>

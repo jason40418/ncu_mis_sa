@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>系統分析與設計</title>
+</head>
+<body>
+    <button id="submit">Send Ajax</button>
+    <!-- JQery CDN -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    <!-- AJAX -->
+    <script>
+        json_data = {
+            "chinese": '中文字',
+            "account": 'thisisaccount',
+            "password": {
+                "real": 123456789,
+                "temp": 7895464546
+            }
+        }
+        json_data = JSON.stringify(json_data);
+        $('#submit').click(function(){
+            $.ajax({
+                    type: 'POST',
+                    url: '/NCU_MIS_SA/ajax.do',
+                    data: json_data,
+                    dataType: "json",
+                    crossDomain: true,
+                    cache: false,
+                    timeout: 5000,
+                    success: function (response) {
+                        console.log(response);
+                        console.log(response.key1)
+                    },
+                    error: function () {
+                        alert("後端連線失敗");
+                    }
+                });
+        });
+    </script>
+</body>
+</html>

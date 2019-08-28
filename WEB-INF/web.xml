@@ -20,12 +20,12 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>mysql</servlet-name>
-        <servlet-class>servletclass.member</servlet-class>
+        <servlet-name>member</servlet-name>
+        <servlet-class>servletclass.MemberController</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>mysql</servlet-name>
-        <url-pattern>/sql.do</url-pattern>
+        <servlet-name>member</servlet-name>
+        <url-pattern>/member</url-pattern>
     </servlet-mapping>
 </web-app>

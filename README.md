@@ -1,3 +1,10 @@
+show variables like '%safe_updates%' 變成 off
+SET SQL_SAFE_UPDATES=0
+update user set host = '%' where user = 'root';  
+select host, user from user; 
+SET SQL_SAFE_UPDATES=1
+https://blog.csdn.net/chenlu5201314/article/details/80017115
+
 javac -encoding UTF-8 -classpath lib/\* classes/servletclass/\*.java
 https://www.itread01.com/articles/1476181246.html
 vs 2015 redistibution

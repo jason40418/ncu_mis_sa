@@ -1,208 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>系統分析與設計</title>
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        crossorigin="anonymous">
-    <style>
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-
-        @media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
-        }
-
-        /* Show it is fixed to the top */
-        body {
-            min-height: 75rem;
-            padding-top: 4.5rem;
-        }
-    </style>
 </head>
-
 <body>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <a class="navbar-brand" href="#">SA/SD</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#">Disabled</a>
-                </li>
-            </ul>
-            <!--<form class="form-inline mt-2 mt-md-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>-->
-        </div>
-    </nav>
-
-    <main role="main" class="container">
-        <div class="form-group">
-            <label for="account">帳號（電子信箱）</label>
-            <input type="email" class="form-control" id="account" aria-describedby="emailHelp" placeholder="請輸入帳號">
-        </div>
-        <div class="form-group">
-            <label for="password">密碼</label>
-            <input type="password" class="form-control" id="password" placeholder="請輸入密碼">
-        </div>
-        <div class="form-group">
-            <label for="name">姓名</label>
-            <input type="text" class="form-control" id="name" placeholder="請輸入姓名">
-        </div>
-        <fieldset class="form-group">
-            <div class="row">
-                <legend class="col-form-label col-sm-2 pt-0">性別</legend>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="gender" id="gender1" value="1">
-                        <label class="form-check-label" for="gender1">男性</label>
-                    </div>
-                        <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="gender" id="gender2" value="2">
-                        <label class="form-check-label" for="gender2">女性</label>
-                    </div>
-            </div>
-        </fieldset>
-        <fieldset class="form-group">
-            <div class="row">
-                <legend class="col-form-label col-sm-2 pt-0">興趣</legend>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="favorite" id="music" value="音樂">
-                    <label class="form-check-label" for="music">音樂</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="favorite" id="movie" value="電影">
-                    <label class="form-check-label" for="movie">電影</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="favorite" id="tv" value="電視">
-                    <label class="form-check-label" for="tv">電視</label>
-                </div>
-            </div>
-        </fieldset>
-        <button id="submit" class="btn btn-primary">Submit</button>
-        <hr />
-        <table class="table" id="table">
-            <thead>
-                <tr>
-                <th scope="col">#</th>
-                <th scope="col">帳號</th>
-                <th scope="col">姓名</th>
-                <th scope="col">性別</th>
-                <th scope="col">興趣</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                </tr>
-                <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-                </tr>
-                <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-                </tr>
-            </tbody>
-            </table>
-    </main>
-
+    <button id="submit">Send Ajax</button>
     <!-- JQery CDN -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <!-- AJAX -->
     <script>
-        $('#submit').click(function () {
-            favorite_list = Array();
-            $('input[name="favorite"]').each(function() {
-                if ($(this).is(":checked"))
-                    favorite_list.push($(this).val());
-            });
-            json_data = {
-                "account": $('#account').val(),
-                "password": $('#password').val(),
-                "name": $('#name').val(),
-                "gender": $('input[name="gender"]:checked').val(),
-                "favorite": favorite_list
+        json_data = {
+            "chinese": '中文字',
+            "account": 'thisisaccount',
+            "password": {
+                "real": 123456789,
+                "temp": 7895464546
             }
-            json_data = JSON.stringify(json_data);
-            $.ajax({
-                type: 'POST',
-                url: '/NCU_MIS_SA/member.do',
-                data: json_data,
-                dataType: "json",
-                crossDomain: true,
-                cache: false,
-                timeout: 5000,
-                success: function (response) {
-                    console.log(response);
-                    updateTable();
-                },
-                error: function () {
-                    alert("後端連線失敗");
-                }
-            });
-        });
-
-        function updateTable() {
-            table_info = Object();
-            $("#table > tbody").empty();
-            $.ajax({
-                type: 'GET',
-                url: '/NCU_MIS_SA/member.do',
-                dataType: "json",
-                crossDomain: true,
-                cache: false,
-                timeout: 5000,
-                success: function (response) {
-                    table_html = "";
-                    $.each(response.data, function(index, value) {
-                        table_html += "<tr><th scope='row'>" + value['ID'] + "</th>";
-                        table_html += "<td>" + value['account'] + "</td>";
-                        table_html += "<td>" + value['name'] + "</td>";
-                        table_html += "<td>" + value['male'] + "</td>";
-                        table_html += "<td>" + value['favorite'] + "</td>";
-                    });
-                    $("#table > tbody").append(table_html);
-                },
-                error: function () {
-                    alert("後端連線失敗");
-                }
-            });
         }
-
-        updateTable()
+        json_data = JSON.stringify(json_data);
+        $('#submit').click(function(){
+            $.ajax({
+                    type: 'POST',
+                    url: '/NCU_MIS_SA/ajax.do',
+                    data: json_data,
+                    dataType: "json",
+                    crossDomain: true,
+                    cache: false,
+                    timeout: 5000,
+                    success: function (response) {
+                        console.log(response);
+                        console.log(response.key1)
+                    },
+                    error: function () {
+                        alert("後端連線失敗");
+                    }
+                });
+        });
     </script>
 </body>
-
 </html>

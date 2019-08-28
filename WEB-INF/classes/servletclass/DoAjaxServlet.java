@@ -32,7 +32,6 @@ public class DoAjaxServlet extends HttpServlet {
 
         JsonReader jsr = new JsonReader(request);
         JSONObject jso = jsr.getObject();
-        
         String resp = "{\"class\": \'140\', \"name\": \'中文字\', \"obj\": {\"yes\" : 40,\"no\" : 50}}";
         jsr.response(resp, response);
     }

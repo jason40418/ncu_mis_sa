@@ -21,6 +21,94 @@ public class DBMgr {
     /**
      * 
      */
+    public JSONObject deleteMember(int id) {
+        JSONArray jsa = new JSONArray();
+        String exexcute_sql = "";
+        long start_time = System.nanoTime();
+        int row = 0;
+        try {
+            Class.forName(JDBC_DRIVER);
+            this.conn = DriverManager.getConnection(DBMgr.DB_URL, DBMgr.USER, DBMgr.PASS);
+
+            String sql = "DELETE FROM `missa`.`members` WHERE `id` = ? LIMIT 1";
+            this.pre_stmt = conn.prepareStatement(sql);
+            this.pre_stmt.setInt(1, id);
+
+            row = this.pre_stmt.executeUpdate();
+
+            // 紀錄真實執行的SQL指令
+            exexcute_sql = this.pre_stmt.toString();
+            System.out.println(exexcute_sql);
+        } catch (SQLException e) {
+            // JDBC ERROR
+            System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
+        } catch (Exception e) {
+            // Class.forName ERROR
+            e.printStackTrace();
+        }
+        long end_time = System.nanoTime();
+        long duration = (end_time - start_time);
+
+        JSONObject response = new JSONObject();
+        response.put("sql", exexcute_sql);
+        response.put("row", row);
+        response.put("time", duration);
+        response.put("data", jsa);
+
+        return response;
+    }
+    
+    public JSONObject getMember(String id) {
+        JSONArray jsa = new JSONArray();
+        String exexcute_sql = "";
+        long start_time = System.nanoTime();
+        int row = 0;
+        try {
+            Class.forName(JDBC_DRIVER);
+            this.conn = DriverManager.getConnection(DBMgr.DB_URL, DBMgr.USER, DBMgr.PASS);
+
+            String sql = "SELECT `name`, `email`, `password` FROM `missa`.`members` WHERE `id` = ? LIMIT 1";
+            this.pre_stmt = conn.prepareStatement(sql);
+            this.pre_stmt.setString(1, id);
+
+            ResultSet rs = this.pre_stmt.executeQuery();
+
+            // 紀錄真實執行的SQL指令
+            exexcute_sql = this.pre_stmt.toString();
+
+            while(rs.next()) {
+                row += 1;
+                JSONObject jso = new JSONObject();
+                String name  = rs.getString("name");
+                jso.put("name", name);
+
+                String email = rs.getString("email");
+                jso.put("email", email);
+
+                String password = rs.getString("password");
+                jso.put("password", email);
+
+                jsa.put(jso);
+            }
+        } catch (SQLException e) {
+            // JDBC ERROR
+            System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
+        } catch (Exception e) {
+            // Class.forName ERROR
+            e.printStackTrace();
+        }
+        long end_time = System.nanoTime();
+        long duration = (end_time - start_time);
+
+        JSONObject response = new JSONObject();
+        response.put("sql", exexcute_sql);
+        response.put("row", row);
+        response.put("time", duration);
+        response.put("data", jsa);
+
+        return response;
+    }
+    
     public JSONObject getAllMembers() {
         JSONArray jsa = new JSONArray();
         String exexcute_sql = "";

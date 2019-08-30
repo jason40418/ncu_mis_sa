@@ -53,17 +53,50 @@ public class MemberController extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
         JsonReader jsr = new JsonReader(request);
+        String id = jsr.getParameter("id");
+        
+        // 判斷以GET方式傳遞字串是否存在
+        if (id.isEmpty()) {
+            DBMgr dbmgr = new DBMgr();
+            JSONObject query = dbmgr.getAllMembers();
+    
+            JSONObject resp = new JSONObject();
+            resp.put("status", "200");
+            resp.put("message", "所有會員資料取得成功");
+            resp.put("response", query);
+    
+            // 回傳可直接給定JSONObject
+            jsr.response(resp, response);
+        }
+        else {
+            DBMgr dbmgr = new DBMgr();
+            JSONObject query = dbmgr.getMember(id);
+    
+            JSONObject resp = new JSONObject();
+            resp.put("status", "200");
+            resp.put("message", "會員資料取得成功");
+            resp.put("response", query);
+    
+            // 回傳可直接給定JSONObject
+            jsr.response(resp, response);
+        }
+    }
 
+    public void doDelete(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+        JsonReader jsr = new JsonReader(request);
+        JSONObject jso = jsr.getObject();
+        
         DBMgr dbmgr = new DBMgr();
-        JSONObject query = dbmgr.getAllMembers();
+        int id = jso.getInt("id");
+        JSONObject query = dbmgr.deleteMember(id);
 
         JSONObject resp = new JSONObject();
         resp.put("status", "200");
-        resp.put("message", "會員資料取得成功");
+        resp.put("message", "會員移除成功！");
         resp.put("response", query);
 
         // 回傳可直接給定JSONObject
         jsr.response(resp, response);
     }
-
 }

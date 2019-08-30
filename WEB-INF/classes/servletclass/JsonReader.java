@@ -8,9 +8,11 @@ import org.json.*;
 
 public class JsonReader {
 	private String request_string;
+	private HttpServletRequest request;
 
 	public JsonReader(HttpServletRequest request) throws IOException, UnsupportedEncodingException {
 		request.setCharacterEncoding("UTF-8");
+		this.request = request;
 		// JavaScript need input JSON format string request
 		StringBuilder sb = new StringBuilder();
         String s;
@@ -19,6 +21,21 @@ public class JsonReader {
 		}
 
 		this.request_string = sb.toString();
+		System.out.println(request_string);
+	}
+
+	public String getParameter(String key) {
+		if (this.request.getParameter(key) != null) {
+			return this.request.getParameter(key);
+		}
+		else {
+			return "";
+		}
+	}
+
+	public JSONArray getArray() {
+		JSONArray request_array = new JSONArray(this.request_string);
+		return request_array;
 	}
 
 	public JSONObject getObject() {

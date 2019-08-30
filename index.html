@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- saved from url=(0027)http://localhost/SA-Member/ -->
 <html>
 
 <head>
@@ -36,8 +35,42 @@
                 </tbody>
             </table>
             <script type="text/javascript">
-                $(document).ready(function() {
-                    // 發出POST的AJAX請求
+                // 全域變數紀錄SQL指令下的次數
+                var sql_num = 0;
+                function deleteMember(id) {
+                    var check = window.confirm("確認刪除會員？");
+                    if (check == true) {
+                        console.log("You pressed OK!");
+                        var request = {'id': id};
+                        var data_string = JSON.stringify(request);
+                        $.ajax({
+                            type: "DELETE",
+                            url: "member.do",
+                            crossDomain: true,
+                            data: data_string,
+                            cache: false,
+                            dataType: 'json',
+                            timeout: 5000,
+                            success: function (response) {
+                                if(response.status == 200){
+                                    $("#flashMessage").html("成功! 已經成功刪除會員...");
+                                    $("#flashMessage").show();
+                                    getAllMember();
+                                }
+                                console.log(response);
+                            },
+                            error: function () {
+                                alert("無法連線到伺服器！");
+                            }
+                        });
+                    }
+                    else {
+                        console.log("You pressed Cancel!");
+                    }
+                }
+
+                function getAllMember() {
+                    // 發出POST的GET請求取得所有會員列表
                     $.ajax({
                             type: "GET",
                             url: "member.do",
@@ -56,36 +89,45 @@
                                 alert("無法連線到伺服器！");
                             }
                     });
+                }
+                
+                // 更新會員列表表格
+                function updateTable(data) {
+                    $("#table > tbody").empty();
+                    var table_html = '';
+                    $.each(data, function(index, value) {
+                        table_html += '<tr><td scope="row">' + value['id'] + '</td>';
+                        table_html += '<td>' + value['name'] + '</td>';
+                        table_html += '<td>' + value['email'] + '</td>';
+                        table_html += '<td>' + '<a href="edit.html?id=' + value['id'] + '">編輯</a> | ';
+                        table_html += '<a href="javascript: deleteMember(' + value['id'] + ');">刪除</a></td></tr>';
+                    })
 
-                    function updateTable(data) {
-                        $("#table > tbody").empty();
-                        var table_html = "";
-                        $.each(data, function(index, value) {
-                            table_html += "<tr><td scope='row'>" + value['id'] + "</td>";
-                            table_html += "<td>" + value['name'] + "</td>";
-                            table_html += "<td>" + value['email'] + "</td>";
-                            table_html += "<td>" + "編輯 | 刪除" + "</td></tr>";
-                        })
+                    $("#table > tbody").append(table_html);
+                }
+                
+                // 更新SQL指令歷史表格
+                function updateSQLTable(data) {
+                    $("#sql_log > tbody").empty();
+                    var time = (data.time / 1000000).toFixed(2);
+                    var table_html = "";
+                    
+                    sql_num = 0;
+                    sql_num += 1
 
-                        $("#table > tbody").append(table_html);
-                    }
-
-                    function updateSQLTable(data) {
-                        $("#sql_log > tbody").empty();
-                        var time = (data.time / 1000000).toFixed(2);
-                        var table_html = "";
-
-                        table_html += '<tr>';
-                        table_html += '<td>' + '1' + '</td>';
-                        table_html += '<td>' + data.sql + '</td>';
-                        table_html += '<td style="text-align: right">' + '0' + '</td>';
-                        table_html += '<td style="text-align: right">' + data.row + '</td>';
-                        table_html += '<td style="text-align: right">' + data.row + '</td>';
-                        table_html += '<td style="text-align: right">' + time + '</td>';
-                        table_html += '</tr>';
-                        $("#sql_log > tbody").append(table_html);
-                        $("#sql_summary").html("(default) " + data.row + " queries took " + time + " ms");
-                    }
+                    table_html += '<tr>';
+                    table_html += '<td>' + sql_num + '</td>';
+                    table_html += '<td>' + data.sql + '</td>';
+                    table_html += '<td style="text-align: right">' + '0' + '</td>';
+                    table_html += '<td style="text-align: right">' + data.row + '</td>';
+                    table_html += '<td style="text-align: right">' + data.row + '</td>';
+                    table_html += '<td style="text-align: right">' + time + '</td>';
+                    table_html += '</tr>';
+                    $("#sql_log > tbody").append(table_html);
+                    $("#sql_summary").html("(default) " + data.row + " queries took " + time + " ms");
+                }
+                $(document).ready(function() {
+                    getAllMember();
                 });
             </script>
         </div>

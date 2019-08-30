@@ -18,9 +18,49 @@ public class DBMgr {
         this.pre_stmt = null;
     }
 
-    /**
-     * 
-     */
+    public JSONObject updateMember(Member m) {
+        JSONArray jsa = new JSONArray();
+        String exexcute_sql = "";
+        long start_time = System.nanoTime();
+        int row = 0;
+        try {
+            Class.forName(JDBC_DRIVER);
+            this.conn = DriverManager.getConnection(DBMgr.DB_URL, DBMgr.USER, DBMgr.PASS);
+
+            String sql = "Update `missa`.`members` SET `name` = ? ,`password` = ? , `modified` = ? WHERE `email` = ?";
+            this.pre_stmt = conn.prepareStatement(sql);
+            String name = m.getName();
+            String email = m.getEmail();
+            String password = m.getPassword();
+            this.pre_stmt.setString(1, name);
+            this.pre_stmt.setString(2, password);
+            this.pre_stmt.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+            this.pre_stmt.setString(4, email);
+
+            row = this.pre_stmt.executeUpdate();
+
+            // 紀錄真實執行的SQL指令
+            exexcute_sql = this.pre_stmt.toString();
+            System.out.println(exexcute_sql);
+        } catch (SQLException e) {
+            // JDBC ERROR
+            System.err.format("SQL State: %s\n%s\n%s", e.getErrorCode(), e.getSQLState(), e.getMessage());
+        } catch (Exception e) {
+            // Class.forName ERROR
+            e.printStackTrace();
+        }
+        long end_time = System.nanoTime();
+        long duration = (end_time - start_time);
+
+        JSONObject response = new JSONObject();
+        response.put("sql", exexcute_sql);
+        response.put("row", row);
+        response.put("time", duration);
+        response.put("data", jsa);
+
+        return response;
+    }
+
     public JSONObject deleteMember(int id) {
         JSONArray jsa = new JSONArray();
         String exexcute_sql = "";

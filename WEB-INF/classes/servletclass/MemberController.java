@@ -99,4 +99,27 @@ public class MemberController extends HttpServlet {
         // 回傳可直接給定JSONObject
         jsr.response(resp, response);
     }
+
+    public void doPut(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+        // 取回Request Json
+        JsonReader jsr = new JsonReader(request);
+        JSONObject jso = jsr.getObject();
+        
+        // 取出JSON Object的值
+        String email = jso.getString("email");
+        String password = jso.getString("password");
+        String name = jso.getString("name");
+
+        Member m = new Member(email, password, name);
+        DBMgr dbmgr = new DBMgr();
+        
+        JSONObject data = dbmgr.updateMember(m);
+        JSONObject resp = new JSONObject();
+        resp.put("status", "200");
+        resp.put("message", "成功! 更新會員資料...");
+        resp.put("response", data);
+        // 回傳可直接給定JSONObject
+        jsr.response(resp, response);
+    }
 }

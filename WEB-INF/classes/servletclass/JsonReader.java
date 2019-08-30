@@ -7,7 +7,7 @@ import java.util.*;
 import org.json.*;
 
 public class JsonReader {
-	private JSONObject requestObj;
+	private String request_string;
 
 	public JsonReader(HttpServletRequest request) throws IOException, UnsupportedEncodingException {
 		request.setCharacterEncoding("UTF-8");
@@ -17,15 +17,13 @@ public class JsonReader {
         while ((s = request.getReader().readLine()) != null) {
             sb.append(s);
 		}
-		
-		//got the full request as string.
-        System.out.println(sb.toString());
 
-        this.requestObj = new JSONObject(sb.toString());
+		this.request_string = sb.toString();
 	}
 
 	public JSONObject getObject() {
-		return this.requestObj;
+		JSONObject request_object = new JSONObject(this.request_string);
+		return request_object;
 	}
 
 	public void response(String resp_string, HttpServletResponse response) throws IOException, UnsupportedEncodingException {
@@ -34,5 +32,12 @@ public class JsonReader {
 		JSONObject responseObj = new JSONObject(resp_string);
 		PrintWriter out = response.getWriter();
         out.println(responseObj);
+	}
+
+	public void response(JSONObject resp, HttpServletResponse response) throws IOException, UnsupportedEncodingException {
+		response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+        out.println(resp);
 	}
 }

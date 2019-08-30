@@ -1,20 +1,12 @@
 package servletclass;
 
-// Import required java libraries
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import org.json.*;
 import java.sql.*;
 
-// Extend HttpServlet class
-public class member extends HttpServlet {
- 
-    static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";  
-    static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/missa?useSSL=false&serverTimezone=UTC&useUnicode=true&characterEncoding=utf8";
-
-    static final String USER = "root";
-    static final String PASS = "H9183149316";
+public class MemberController extends HttpServlet {
     private String message;
     public String output = "";
 
@@ -30,146 +22,48 @@ public class member extends HttpServlet {
         JSONObject jso = jsr.getObject();
         
         // 取出JSON Object的值
-        String account = jso.getString("account");
+        String email = jso.getString("email");
         String password = jso.getString("password");
         String name = jso.getString("name");
-        int gender = jso.getInt("gender");
-        JSONArray ja_favorite = jso.getJSONArray("favorite");
+
+        Member m = new Member(email, password, name);
+        DBMgr dbmgr = new DBMgr();
         
-        // 將JSONArray轉換成String
-        String favorite = "";
-        if (ja_favorite != null) { 
-            for (int i=0 ; i<ja_favorite.length() ; i++){ 
-                favorite += ja_favorite.getString(i);
-                if (i != ja_favorite.length()-1)
-                    favorite += "、";
-            }
-        } 
-
-        Connection conn = null;
-        Statement stmt = null;
-        try {
-            Class.forName(JDBC_DRIVER);
-            // open connect
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-        
-            // Excution
-            stmt = conn.createStatement();
-            String sql;
-            sql = "INSERT INTO `user`(account, password, name, male, favorite) VALUES(\'" + account + "\',\'" + password + "\',\'" + name + "\',\'" + Integer.toString(gender) + "\',\'" + favorite + "\')";
-            System.out.println(sql);
-            stmt.executeUpdate(sql);
-
-            // finaish to close
-            stmt.close();
-            conn.close();
-        } catch(SQLException se) {
-            // JDBC ERROR
-            se.printStackTrace();
-        } catch(Exception e) {
-            // Class.forName ERROR
-            e.printStackTrace();
-        } finally{
-            // Close Connection
-            try {
-                if(stmt!=null) stmt.close();
-            } catch(SQLException se2) {
-
-            } // Nothing to do
-            
-            try {
-                if(conn!=null) conn.close();
-            } catch(SQLException se){
-                se.printStackTrace();
-            }
+        if(email.isEmpty() || password.isEmpty() || name.isEmpty()) {
+            String resp = "{\"status\": \'400\', \"message\": \'欄位不能有空值\', \'response\': \'\'}";
+            jsr.response(resp, response);
         }
-        
-        String resp = "{\"status\": \'200\', \"name\": \'" + account + "\', \"message\": 新增成功}";
-        jsr.response(resp, response);
+        // 判斷會員信箱是否有重複
+        else if (!dbmgr.checkDuplicateMember(m)) {
+            JSONObject data = dbmgr.createMember(m);
+            JSONObject resp = new JSONObject();
+            resp.put("status", "200");
+            resp.put("message", "成功! 註冊會員資料...");
+            resp.put("response", data);
+            // 回傳可直接給定JSONObject
+            jsr.response(resp, response);
+        }
+        else {
+            // 回傳可直接組成JSON格式字串
+            String resp = "{\"status\": \'400\', \"message\": \'新增帳號失敗，帳號重複！\', \'response\': \'\'}";
+            jsr.response(resp, response);
+        }
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-      
-        Connection conn = null;
-        Statement stmt = null;
-        JSONArray jsa = new JSONArray();
+        JsonReader jsr = new JsonReader(request);
 
-        try {
-            Class.forName(JDBC_DRIVER);
-            // open connect
-            System.out.println("Connect to DB...");
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-        
-            // Excution
-            System.out.println("SQL Commands...");
-            stmt = conn.createStatement();
-            String sql;
-            
-            sql = "SELECT * FROM `user`";
-            ResultSet rs = stmt.executeQuery(sql);
-            
-            while(rs.next()) {
-                JSONObject jso = new JSONObject();
-                int id  = rs.getInt("id");
-                System.out.println(id);
-                jso.put("ID", id);
+        DBMgr dbmgr = new DBMgr();
+        JSONObject query = dbmgr.getAllMembers();
 
-                String account = rs.getString("account");
-                System.out.println(account);
-                jso.put("account", account);
+        JSONObject resp = new JSONObject();
+        resp.put("status", "200");
+        resp.put("message", "會員資料取得成功");
+        resp.put("response", query);
 
-                String name = rs.getString("name");
-                System.out.println(name);
-                jso.put("name", name);
-
-                String male = rs.getString("male");
-                System.out.println(male);
-                jso.put("male", male);
-
-                String favorite = rs.getString("favorite");
-                System.out.println(favorite);
-                jso.put("favorite", favorite);
-
-                jsa.put(jso);
-            }
-            
-            // finaish to close
-            rs.close();
-            stmt.close();
-            conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch(Exception e) {
-            // Class.forName ERROR
-            e.printStackTrace();
-        } finally{
-            // Close Connection
-            try {
-                if(stmt!=null) stmt.close();
-            } catch(SQLException se2) {
-
-            } // Nothing to do
-            
-            try {
-                if(conn!=null) conn.close();
-            } catch(SQLException se){
-                se.printStackTrace();
-            }
-        }
-
-        JSONObject answer = new JSONObject();
-        answer.put("status", "200");
-        answer.put("data", jsa);
-
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html; charset=UTF-8");
-        // Actual logic goes here.
-        PrintWriter out = response.getWriter();
-        out.println(answer);
+        // 回傳可直接給定JSONObject
+        jsr.response(resp, response);
     }
 
-   public void destroy() {
-      // do nothing.
-   }
 }

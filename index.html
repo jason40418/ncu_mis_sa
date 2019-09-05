@@ -45,7 +45,7 @@
                         var data_string = JSON.stringify(request);
                         $.ajax({
                             type: "DELETE",
-                            url: "member.do",
+                            url: "api/member.do",
                             crossDomain: true,
                             data: data_string,
                             cache: false,
@@ -73,7 +73,7 @@
                     // 發出POST的GET請求取得所有會員列表
                     $.ajax({
                             type: "GET",
-                            url: "member.do",
+                            url: "api/member.do",
                             crossDomain: true,
                             cache: false,
                             dataType: 'json',

@@ -71,7 +71,7 @@
                         // 發出POST的PUT請求
                         $.ajax({
                                 type: "PUT",
-                                url: "member.do",
+                                url: "api/member.do",
                                 data: data_string,
                                 crossDomain: true,
                                 cache: false,
@@ -113,7 +113,7 @@
                 function getMember() {
                     $.ajax({
                         type: "GET",
-                        url: "member.do",
+                        url: "api/member.do",
                         crossDomain: true,
                         data: "id=" + id,
                         cache: false,

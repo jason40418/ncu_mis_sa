@@ -50,38 +50,45 @@
                     var name = $('#member_name').val();
                     var email = $('#member_email').val();
                     var password = $('#member_password').val();
-                    
-                    // 將資料組成JSON格式
-                    var data_object = {
-                        "id": id,
-                        "name": name,
-                        "email": email,
-                        "password": password
-                    };
 
-                    // 將JSON格式轉換成字串
-                    var data_string = JSON.stringify(data_object);
+                    var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
-                    // 發出POST的PUT請求
-                    $.ajax({
-                            type: "PUT",
-                            url: "member.do",
-                            data: data_string,
-                            crossDomain: true,
-                            cache: false,
-                            dataType: 'json',
-                            timeout: 5000,
-                            success: function (response) {
-                                $('#flashMessage').html(response.message);
-                                $('#flashMessage').show();
-                                if(response.status == 200){
-                                    updateSQLTable(response.response);
+                    if(!password_rule.test(password)) {
+                        alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
+                    }
+                    else {
+                        // 將資料組成JSON格式
+                        var data_object = {
+                            "id": id,
+                            "name": name,
+                            "email": email,
+                            "password": password
+                        };
+
+                        // 將JSON格式轉換成字串
+                        var data_string = JSON.stringify(data_object);
+
+                        // 發出POST的PUT請求
+                        $.ajax({
+                                type: "PUT",
+                                url: "member.do",
+                                data: data_string,
+                                crossDomain: true,
+                                cache: false,
+                                dataType: 'json',
+                                timeout: 5000,
+                                success: function (response) {
+                                    $('#flashMessage').html(response.message);
+                                    $('#flashMessage').show();
+                                    if(response.status == 200){
+                                        updateSQLTable(response.response);
+                                    }
+                                },
+                                error: function () {
+                                    alert("無法連線到伺服器！");
                                 }
-                            },
-                            error: function () {
-                                alert("無法連線到伺服器！");
-                            }
-                    });
+                        });
+                    }
                 }
 
                 // 更新SQL指令歷史表格

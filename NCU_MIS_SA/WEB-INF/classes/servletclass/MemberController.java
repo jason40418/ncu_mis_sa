@@ -6,6 +6,7 @@ import javax.servlet.http.*;
 import org.json.*;
 
 public class MemberController extends HttpServlet {
+	private static final long serialVersionUID = 1L;
 
 	public String output = "";
     public void doPost(HttpServletRequest request, HttpServletResponse response)

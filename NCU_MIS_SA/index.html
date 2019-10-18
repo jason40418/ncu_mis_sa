@@ -28,6 +28,8 @@
                         <th>編號</th>
                         <th>姓名</th>
                         <th>電郵</th>
+                        <th>登入次數</th>
+                        <th>狀態</th>
                         <th>功能</th>
                     </tr>
                 </thead>
@@ -99,6 +101,8 @@
                         table_html += '<tr><td scope="row">' + value['id'] + '</td>';
                         table_html += '<td>' + value['name'] + '</td>';
                         table_html += '<td>' + value['email'] + '</td>';
+                        table_html += '<td>' + value['login_times'] + '</td>';
+                        table_html += '<td>' + value['status'] + '</td>';
                         table_html += '<td>' + '<a href="edit.html?id=' + value['id'] + '">編輯</a> | ';
                         table_html += '<a href="javascript: deleteMember(' + value['id'] + ');">刪除</a></td></tr>';
                     })

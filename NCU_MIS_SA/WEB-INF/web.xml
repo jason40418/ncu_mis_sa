@@ -3,7 +3,7 @@
 <web-app>
     <servlet>
         <servlet-name>member</servlet-name>
-        <servlet-class>servletclass.MemberController</servlet-class>
+        <servlet-class>ncu.im3069.demo.controller.MemberController</servlet-class>
     </servlet>
 
     <servlet-mapping>

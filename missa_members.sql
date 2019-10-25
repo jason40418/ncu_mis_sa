@@ -41,7 +41,7 @@ CREATE TABLE `members` (
 
 LOCK TABLES `members` WRITE;
 /*!40000 ALTER TABLE `members` DISABLE KEYS */;
-INSERT INTO `members` VALUES (1,'測試人員','test@cc.ncu.edu.tw','Test1234567','2019-10-18 11:30:28','2019-10-18 11:30:28',0,'junior');
+INSERT INTO `members` VALUES (1,'測試人員','test@cc.ncu.edu.tw','Test1234567','2019-10-18 11:30:28','2019-10-18 11:30:28',0,'偶數會員');
 /*!40000 ALTER TABLE `members` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

@@ -30,7 +30,7 @@ CREATE TABLE `members` (
   `modified` datetime DEFAULT NULL,
   `created` datetime DEFAULT NULL,
   `login_times` int(11) DEFAULT '0',
-  `status` varchar(255) DEFAULT 'junior',
+  `status` varchar(255) DEFAULT '偶數會員',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

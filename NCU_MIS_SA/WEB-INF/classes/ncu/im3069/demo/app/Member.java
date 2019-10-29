@@ -91,8 +91,6 @@ public class Member {
         this.name = name;
         this.login_times = login_times;
         this.status = status;
-        /** 計算會員之組別 */
-        calcAccName();
     }
     
     /**

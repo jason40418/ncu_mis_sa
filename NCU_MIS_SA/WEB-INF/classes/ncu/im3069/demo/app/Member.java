@@ -178,7 +178,7 @@ public class Member {
      * @return the data 取得該名會員之所有資料並封裝於JSONObject物件內
      */
     public JSONObject getData() {
-        /** 透過JSONObject將該名會員所需之資料全部進行封裝 */
+        /** 透過JSONObject將該名會員所需之資料全部進行封裝*/ 
         JSONObject jso = new JSONObject();
         jso.put("id", getID());
         jso.put("name", getName());

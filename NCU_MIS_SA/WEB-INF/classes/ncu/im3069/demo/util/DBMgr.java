@@ -121,4 +121,10 @@ public class DBMgr {
             e.printStackTrace();
         }
     }
+    
+    public static String[] stringToArray(String data, String delimiter) {
+      String[] result;
+      result = data.split(delimiter);
+      return result;
+    }
 }

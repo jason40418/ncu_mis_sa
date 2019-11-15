@@ -49,7 +49,7 @@ public class JsonReader {
         
         /** 將StringBuilder轉換成String，並印出該字串 */
         this.request_string = sb.toString();
-        System.out.println(request_string);
+        System.out.println("[@JsonReader]" + this.request_string);
     }
 
     /**

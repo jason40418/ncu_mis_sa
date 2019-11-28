@@ -10,26 +10,26 @@ import java.util.Properties;
  * DBMgr類別（class）主要管理與資料庫建立與關閉連線之方法（method），並儲存相關之設定資料<br>
  * 每個要與資料庫建立連線之類別應該import本類別
  * </p>
- * 
+ *
  * @author IPLab
  * @version 1.0.0
  * @since 1.0.0
  */
 
 public class DBMgr {
-    
+
     /** JDBC_DRIVER常數，設定JDBC驅動之類別名稱 */
     static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-    
+
     /** DB_URL常數，指定資料庫所在之IP或網域、Port號碼與指定所要使用資料庫 */
-    static final String DB_URL = "jdbc:mysql://localhost:3306/missa";
-    
+    static final String DB_URL = "jdbc:mysql://localhost:3306/missa?allowPublicKeyRetrieval=true&useSSL=false";
+
     /** USER常數，所要使用之資料庫使用者帳號 */
     static final String USER = "root";
-    
+
     /** PASS常數，所有使用之資料庫使用者密碼 */
     static final String PASS = "123456";
-    
+
     /** 靜態指定所要使用之Class名稱 **/
     static {
         try {
@@ -40,14 +40,14 @@ public class DBMgr {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * 實例化（Instantiates）一個新的（new）DBMgr物件
      */
     public DBMgr() {
-        
+
     }
-    
+
     /**
      * 透過JDBC建立資料庫之連線
      *
@@ -67,10 +67,10 @@ public class DBMgr {
         /** 設定連線所使用之帳號和密碼 */
         props.setProperty("user", DBMgr.USER);
         props.setProperty("password", DBMgr.PASS);
-        
+
         /** 宣告Connection變數，並先指向為null */
         Connection conn = null;
-        
+
         /** 嘗試透過DriverManager的getConnection()建立並取得資料庫連線 */
         try {
             conn = DriverManager.getConnection(DBMgr.DB_URL, props);
@@ -78,11 +78,11 @@ public class DBMgr {
             /** 若錯誤則印出錯誤訊息 */
             e.printStackTrace();
         }
-        
+
         /** 建立與取回連線成功後，回傳該連線之變數 */
         return conn;
     }
-    
+
     /**
      * 關閉所有資料庫連線與釋放SQL資源
      *
@@ -100,7 +100,7 @@ public class DBMgr {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * 關閉所有資料庫連線與釋放SQL資源
      *
@@ -121,7 +121,7 @@ public class DBMgr {
             e.printStackTrace();
         }
     }
-    
+
     public static String[] stringToArray(String data, String delimiter) {
       String[] result;
       result = data.split(delimiter);

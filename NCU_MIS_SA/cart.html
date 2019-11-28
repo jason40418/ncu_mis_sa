@@ -88,7 +88,7 @@
 		      <button id="check" class="btn btn-primary btn-lg btn-block" type="button">結帳</button>
 		      <button id="clean" class="btn btn-dark btn-lg btn-block" type="button">清空購物車</button>
 		    </div>
-		    
+
 		    <div class="col-md-8 order-md-1">
 		      <h4 class="mb-3">個人資訊</h4>
 		      <hr class="mb-4">
@@ -97,28 +97,28 @@
 	            <label for="lastName">姓</label>
 	            <input type="text" class="form-control" id="last_name" maxlength="10" value="" required>
 	          </div>
-	          
+
 	          <div class="col-md-6 mb-4">
 	            <label for="firstName">名</label>
 	            <input type="text" class="form-control" id="first_name" maxlength="10" placeholder="" value="" required>
 	          </div>
 	        </div>
-	        
+
 	        <div class="mb-3">
 	          <label for="email">Email <span class="text-muted">(Optional)</span></label>
 	          <input type="email" class="form-control" maxlength="50" id="email" placeholder="you@example.com">
 	        </div>
-	        
+
 	        <div class="mb-3">
 	          <label for="phonenum">手機號碼:</label><br/>
 	          <input id="phone" type="tel" class="form-control" maxlength="12" placeholder="09xx-xxx-xxx" required>
 	        </div>
-	
+
 	        <div class="mb-3">
 	          <label for="address">住址</label>
 	          <input type="text" class="form-control" id="address" maxlength="255" placeholder="請輸入有效之地址！" required>
 	        </div>
-	
+
 	        <h4 class="mb-3">商品資訊</h4>
 	        <hr class="mb-4">
 	        <div class="row">
@@ -139,15 +139,15 @@
 			        </table>
 			      </div>
 		      </div>
-		      
+
 	      </div>
       </div>
 	  </div>
   </div>
 
-  <script>   
+  <script>
     var [client_cart_obj, client_cart_amount]  = getCartDataFromClient();
-    
+
     if (client_cart_obj.length == 0) {
     	alert("購物車沒有任何商品！");
     	calcSummaryInformation();
@@ -155,7 +155,7 @@
     }
     else
     	getCartProduct();
-    
+
     $("#check").click(function () {
     	var data = {
     			"first_name": $("#first_name").val(),
@@ -166,12 +166,12 @@
     			"item": client_cart_obj,
     			"quantity": client_cart_amount
     	}
-    	
+
     	// 驗證輸入的資料
     	pass_vaild = vaildData(data);
     	if (pass_vaild) {
     		var data_string = JSON.stringify(data);
-    		
+
     		// 發出POST的AJAX請求
         $.ajax({
           type: "POST",
@@ -209,32 +209,35 @@
         });
     	}
     });
-    
+
     $("#clean").click(function () {
     	console.log("[@Action]清空購物車");
     	cleanAllData();
     });
-    
+
     function vaildData(data) {
     	var email_rule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
     	var phone_rule = /^09\d{2}-\d{3}-\d{3}$/;
-    	
+
     	if (data["first_name"] == "" || data["last_name"] == "" || data['phone'] == "" || data['address'] == "")  alert("必填寫欄位不得有空值！");
     	else if (data['email'] != "" && !email_rule.test(data['email'])) alert("Email格式不符！");
     	else if (!phone_rule.test(data['phone'])) alert("手機格式不符（應為09XX-XXX-XXX）！");
     	else return true;
-    	
+
     	return false;
     }
-    
+
     function cleanAllData() {
     	client_cart_obj = [];
       client_cart_amount = [];
       updateCartDataToClent();
       $("#cart_table > tbody").empty();
+      $("#total_item").html('0');
+      $("#total_quantity").html('0');
+      $("#summary").html('0');
       setButtonState("check", false);
     }
-    
+
     function getCartProduct() {
       $.ajax({
         type: "GET",
@@ -257,7 +260,7 @@
         }
       });
     }
-    
+
     function updateAllQuantitySubtotal() {
     	for (var i=0 ; i < client_cart_obj.length ; i++) {
     		var id = client_cart_obj[i];
@@ -268,14 +271,14 @@
     		$('#subtotal_' + id).html(subtotal);
     	}
     }
-    
+
     function isNumberKey(evt){
 	    var charCode = (evt.which) ? evt.which : evt.keyCode
 	    if (charCode > 31 && (charCode < 48 || charCode > 57))
 	        return false;
 	    return true;
     }
-    
+
     function keyEventListen() {
     	$('input[name="quantity[]"').on(
           'keypress',
@@ -283,7 +286,7 @@
         	  return isNumberKey(e);
           }
       );
-    	
+
     	$('input[name="quantity[]"').on(
  	        'keyup',
  	        function (e) {
@@ -298,32 +301,32 @@
  	          calcSummaryInformation();
  	        }
  	    );
-    	
+
     	$('button[name="remove[]"').click(function () {
     		var id = (this.id).split('_')[1];
     		var i = client_cart_obj.indexOf(id);
-    		
+
     		if (i > -1) {
 	    		client_cart_obj.splice(i, 1);
 	    		client_cart_amount.splice(i, 1);
     		}
-    		
+
     		updateCartDataToClent();
     		$('#row_' + id).remove();
     		if (client_cart_obj.length == 0)
   		      alert("購物車沒有任何商品！");
     		calcSummaryInformation();
     	});
-    	
-    	
+
+
     }
-    
+
     function calcSubTotal(price, quantity) {
     	var result = (parseFloat(price) * parseFloat(quantity)).toFixed(2);
     	result = isNaN(result) ? 0.00 : result;
     	return result;
     }
-    
+
     function updateCartTable(data) {
     	table_html = '';
     	$("#cart_table > tbody").empty();
@@ -340,7 +343,7 @@
 
       $("#cart_table > tbody").append(table_html);
     }
-    
+
     function getCartDataFromClient() {
     	let cart = JSON.parse(localStorage.getItem("client_cart_obj"));
     	let amount = JSON.parse(localStorage.getItem("client_cart_amount"));
@@ -348,23 +351,23 @@
     	amount = !amount ? new Array() : amount;
     	return [cart, amount];
     }
-    
+
     function updateCartDataToClent() {
     	localStorage.setItem("client_cart_obj", JSON.stringify(client_cart_obj));
     	localStorage.setItem("client_cart_amount", JSON.stringify(client_cart_amount));
     }
-    
+
     function updateClentCartData(id, quantity) {
     	var i = client_cart_obj.indexOf(id);
     	client_cart_amount[i] = (quantity === "") ? 0 : parseInt(quantity);
     	updateCartDataToClent();
     }
-    
+
     function calcSummaryInformation() {
     	var total_item = client_cart_obj.length;
     	var total_price = 0.00;
     	var total_quantity = 0;
-    	
+
     	for(var i=0 ; i < total_item ; i++) {
     		var id = client_cart_obj[i];
     		var price = $('#price_' + id).html();
@@ -373,17 +376,17 @@
     		total_price += isNaN(calc) ? 0.0 : calc;
     		total_quantity += (isNaN(quantity) || (quantity == "")) ? 0 : parseInt(quantity);
     	}
-    	
+
     	// Client端日期
     	var date = new Date();
     	var iso_date = date.toISOString();
-    	
+
     	$("#date").html(iso_date.substring(0, 10));
     	$("#total_item").html(total_item);
     	$("#total_quantity").html(total_quantity);
     	$("#summary").html(total_price.toFixed(2));
     }
-    
+
     function setButtonState(id, action) {
       if (!action) {
           $('#' + id).prop('disabled', true);

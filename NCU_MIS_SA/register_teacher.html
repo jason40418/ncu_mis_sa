@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>老師會員註冊</title>
+	
+	<link rel="stylesheet" type="text/css" href="statics/css/design_register.css">
+    
+    <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+
+</head>
+
+
+<body>	
+	<div id="container">
+		<div id="header">
+			<img src="statics/img/logo.png" alt="Italian Trulli" width="80" height="60">			
+		</div>
+
+		<div id="content">
+			<h1>註冊老師會員</h1>
+			<div id="flashMessage" class="message" style="display: none;"></div>
+			
+			<div id="next_content">
+				<h3>請輸入您的個人資料</h3>
+				
+				<form id="form" accept-charset="UTF-8" >
+
+					<div style="display:none;"><input type="hidden" name="_method" value="POST"></div>
+
+					<div id="input" style="border: none">
+						<div class="input text required">
+							<label for="member_name">姓名</label>
+							<input type="text" name="name" maxlength="30" id="member_name" required="required">				
+						</div>
+
+						<div class="input email required">
+							<label for="member_email">email</label>
+							<input type="email" name="email" maxlength="50" id="member_email" required="required">
+						</div>
+
+						<div class="input password required">
+							<label for="member_password">密碼</label>
+							<input type="password" name="password" maxlength="30" id="member_password" required="required">
+						</div>
+
+						<div class="input tel required">
+							<label for="member_tel">手機</label>
+							<input type="tel" name="tel" maxlength="10" id="member_tel" required="required">
+						</div>
+
+						<div class="input gender">
+						<label for="member_gender">性別</label>
+							<select id="select_gender">
+  								<option value="1" selected="selected">男</option>
+  								<option value="2">女</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="submit"><input type="button" value="註冊" id="submit"></div>
+
+					<h5>已有我們的帳號? <!-- <input type="button" value="登入"  id="log_in"> -->
+					<a href="log_in.html" class="button"><input type="button" value="登入"  id="log_in"></a>
+					</h5>
+			
+
+				</form>
+			</div>
+		</div>
+	
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+				
+				var $form = $('#submit');
+				$form.click(function(){
+					submit();
+				});
+
+				 var $login = $('#log_in');
+				 $login.click(function(){
+				 	 href="log_in.html";
+				 });
+
+				function submit(){
+					var name = $('#member_name').val();
+					var email = $('#member_email').val();
+					var password = $('#member_password').val();
+					var tel = $('#member_tel').val();
+					var e = document.getElementById("select_gender");
+					var gender = e.options[e.selectedIndex].value;
+					
+					
+					var email_rule = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/;
+                    var password_rule = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+                    if (!email_rule.test(email)) {
+                            alert("Email格式不符！");
+                    }
+                    else if(!password_rule.test(password)) {
+                            alert("密碼格式不符，長度至少8，且至少包含一個數字和英文字母！");
+                    }
+                    else{
+                    	var data_object = {
+                    		"name":name,
+                    		"email":email,
+                    		"password":password,
+                    		"cellphone":tel,
+                    		"gender":gender
+                    	};
+
+                    	var data_string = JSON.stringify(data_object);
+
+                    	$.ajax({
+                                    type: "POST",
+                                    url: "api/teacher.do",
+                                    data: data_string,
+                                    crossDomain: true,
+                                    cache: false,
+                                    dataType: 'json',
+                                    timeout: 5000,
+                                    success: function (response) {
+                                    	//alert("get respose");
+                                        $('#flashMessage').html(response.message);
+                                        $('#flashMessage').show();
+                                        /*if(response.status == 200){
+                                            updateSQLTable(response.response);
+                                        }*/
+                                    },
+                                    error: function () {
+                                        alert("無法連線到伺服器！");
+                                    }
+                            });
+                    }
+
+
+                 }
+
+				});
+			
+		</script>
+
+	</div>
+</body>
+</html>

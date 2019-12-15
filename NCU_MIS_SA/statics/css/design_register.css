@@ -1,0 +1,44 @@
+body {
+	background: #ff8000;
+	color: #fff;
+	font-family:'lucida grande',verdana,helvetica,arial,sans-serif;
+	font-size:100%;
+	margin: 0;
+}
+
+#content{
+	background: #fff;
+	clear: both;
+	color: #333;
+	padding: 10px 20px 120px 300px;	
+}
+
+#header{
+	margin: 0px 0px 0px 250px;
+}
+
+#next_content{
+	padding: 0px 0px 0px 20px;	
+}
+
+#form{
+	padding: 0px 500px 0px 200px;	
+}
+
+#input{
+ text-align: right;
+ font-size: 20px;
+ font-weight: bold;
+}
+
+#submit{
+	margin: -10px 0px 0px 270px;	
+	font-size: 20px;
+	padding: 0px 20px 0px 20px;
+	border-radius: 5px;
+	font-weight: bold;
+
+}
+h5{
+	margin: 20px 0px 0px 50px;
+}

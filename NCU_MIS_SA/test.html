@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>老師會員註冊</title>
+
+    <script src="statics/js/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+
+
+</head>
+
+
+<body>	
+	<div id="container">
+
+
+
+		<div id="content">
+			<h1>註冊老師會員</h1>
+
+			<div id="next_content">
+				<h3>請輸入您的個人資料</h3>
+
+				<form id="form" accept-charset="UTF-8" >
+
+					<div style="display:none;"><input type="hidden" name="_method" value="POST"></div>
+
+					<div id="input" style="border: none">
+						<div class="input text required">
+							<label for="member_name">姓名</label>
+							<input type="text" name="name" maxlength="30" id="member_name" required="required">				
+						</div>
+
+						<div class="input email required">
+							<label for="member_email">email</label>
+							<input type="email" name="email" maxlength="50" id="member_email" required="required">
+						</div>
+
+						<div class="input passward required">
+							<label for="member_passward">密碼</label>
+							<input type="passward" name="passward" maxlength="30" id="member_passward" required="required">
+						</div>
+
+						<div class="input tel required">
+							<label for="member_tel">手機</label>
+							<input type="tel" name="tel" maxlength="10" id="member_tel" required="required">
+						</div>
+
+						<div class="input gender">
+							<label for="member_gender">性別 男<input type="radio" name="gender"></label> 女<input type="radio" name="gender"></label>
+						</div>
+					</div>
+
+					<div class="submit"><input type="button" value="註冊" id="submit"></div>
+
+					<h5>已有我們的帳號? <!-- <input type="button" value="登入"  id="log_in"> -->
+					<a href="log_in.html" class="button"><input type="button" value="登入"  id="log_in"></a>
+					</h5>
+			
+
+				</form>
+			</div>
+		</div>
+	
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+				var $form = $('#submit');
+				$form.click(function(){
+					alert("有用喔");
+					//submit();
+				});
+			});
+	     </script>
+
+	</div>
+</body>
+</html>
